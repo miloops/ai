@@ -53,10 +53,10 @@ class DepthFirst
 
     # 7. If any of these successors is a dead end, remove it from OPEN and clean up CLOSED
     for child in n.children
-       if child.dead_end
-         @open.delete(child)
-         clean_up_closed(n)
-       end
+      if child.dead_end
+        @open.delete(child)
+        clean_up_closed(n)
+      end
     end
 
     # 8. Go to step 2.
@@ -65,7 +65,7 @@ class DepthFirst
 
   def clean_up_closed(node)
     while !node.parent.nil?
-      @closed.delete(node) if node && (@open & node.children == [])
+      @closed.delete(node) if @open & node.children == []
       node = node.parent
     end
   end
