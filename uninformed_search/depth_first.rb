@@ -1,10 +1,5 @@
 require 'node'
-
-class Symbol
-  def to_proc
-    lambda {|i| i.send(self)}
-  end
-end
+require File.dirname(__FILE__) + '/../ai_helper'
 
 class DepthFirst
   DEPTH_BOUND = 10
@@ -34,7 +29,7 @@ class DepthFirst
 
     # 3. Remove the topmost node from OPEN and put it on CLOSED. Call this node _n_.
     @closed << (n = @open.shift)
-    
+
     # 4. If the depth of _n_ is equal to the depth bound, clean up CLOSED and go to
     # step 2; otherwise continue.
     if n.depth == DEPTH_BOUND
@@ -76,7 +71,7 @@ class DepthFirst
     while !node.parent.nil?
       node = node.parent
       @closed.delete(node) if node && (@open & node.children == [])
-    end    
+    end
   end
 
   def debug_stacks

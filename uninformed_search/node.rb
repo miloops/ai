@@ -1,7 +1,6 @@
 class Node
   attr_accessor :name, :start_node, :dead_end, :parent, :goal, :children
-  
-  # Set defaults
+
   def initialize(args = {})
     @name         = args[:name]
     @parent       = args[:parent]
