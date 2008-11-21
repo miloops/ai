@@ -37,7 +37,7 @@ class DepthFirst
       seek_solution
     end
 
-    # 5. Expand n, generating all of its successors.
+    # 5. Expand _n_, generating all of its successors.
     # Put there successors (in no particular order) onn top of OPEN and provide
     # for each a pointer back to _n_.
     @open.unshift(n.children).flatten!
@@ -65,15 +65,15 @@ class DepthFirst
 
   def clean_up_closed(node)
     while !node.parent.nil?
-      node = node.parent
       @closed.delete(node) if node && (@open & node.children == [])
+      node = node.parent
     end
   end
 
   def debug_stacks
     p "OPEN: #{@open.map(&:name).join(' - ')}"
     p "CLOSED: #{@closed.map(&:name).join(' - ')}"
-    p ""
+    p "------------------------------------------"
   end
 end
 
