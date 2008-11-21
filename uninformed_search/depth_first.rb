@@ -63,10 +63,6 @@ class DepthFirst
     seek_solution
   end
 
-  def start_node
-    @nodes.select(&:start_node).first
-  end
-
   def clean_up_closed(node)
     while !node.parent.nil?
       node = node.parent
