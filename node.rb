@@ -2,8 +2,7 @@ class Node
   attr_accessor :name, :start_node, :dead_end, :parent, :goal
   
   # Set defaults
-  def initialize(*args)
-    args          = args.flatten.first
+  def initialize(args = {})
     @name         = args[:name]
     @parent       = args[:parent]
     @start_node   = args[:start_node] || false
