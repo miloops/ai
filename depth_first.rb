@@ -10,41 +10,41 @@ class DepthFirst
     @open   = []
     @closed = []
   end
-  
+
   def run!
     # 1. Put the start node on OPEN
     @open << start_node
     debug_stacks
     puts "The GOAL is node: #{seek_solution.name}"
   end
-  
+
   def seek_solution
     # 2. If OPEN is empty, exit with failure; otherwise continue
     raise "OPEN is empty, no way out!!!" if @open.empty?
-    
+
     # 3. Remove the topmost node from OPEN and put it on CLOSED. Call this node _n_.
     @closed << (n = @open.shift)
-    
+
     # 4. If the depth of _n_ is equal to the depth bound, clean up CLOSED and go to
     # step 2; otherwise continue.
     if n.depth == DEPTH_BOUND
       clean_up_closed
       seek_solution
     end
-    
+
     # 5. Expand n, generating all of its successors.
     # Put there successors (in no particular order) onn top of OPEN and provide
     # for each a pointer back to _n_.
     @open += n.children(@nodes)
-    
-    
+
+
     # 6. If any of these successors is a goal node, exit with the solution obtained by
     # tracing back through its pointers; otherwise continue.
     if goal = @open.select { |x| x.goal }.first
       debug_stacks
       return goal
     end
-    
+
     # 7. If any of these successors is a dead end, remove it from OPEN and clean up CLOSED
     @open.delete_if { |x| x.dead_end }
 
@@ -54,19 +54,19 @@ class DepthFirst
     # 8. Go to step 2.
     seek_solution
   end
-  
+
   def start_node
     @nodes.select { |x| x.start_node }.first
   end
-  
+
   def clean_up_closed
 #    @closed.delete_if { |x| x.childen(@nodes) }
   end
-  
+
   def debug_stacks
     p "OPEN: #{@open.map { |x| x.name}.join(' - ')}"
     p "CLOSED: #{@closed.map { |x| x.name}.join(' - ')}"
-    p ""  
+    p ""
   end
 end
 
