@@ -49,7 +49,7 @@ class DepthFirst
 
     # 6. If any of these successors is a goal node, exit with the solution obtained by
     # tracing back through its pointers; otherwise continue.
-    if goal = @open.select { |x| x.goal }.first
+    if goal = @open.select(&:goal).first
       debug_stacks
       return goal
     end
@@ -69,7 +69,7 @@ class DepthFirst
   end
 
   def start_node
-    @nodes.select { |x| x.start_node }.first
+    @nodes.select(&:start_node).first
   end
 
   def clean_up_closed(node)
