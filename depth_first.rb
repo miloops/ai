@@ -1,23 +1,31 @@
 require 'node'
 
+class Symbol
+  def to_proc
+    lambda {|i| i.send(self)}
+  end
+end
+
 class DepthFirst
   DEPTH_BOUND = 10
-  # Stacks & Nodes
-  attr_accessor :open, :closed, :nodes
 
-  def initialize()
-    @nodes  = []
-    @open   = []
-    @closed = []
+  def initialize(start_node = nil)
+    if start_node
+      @open   = []
+      @closed = []
+      @start_node = start_node
+    else
+      raise ArgumentError, "A start node is required!"
+    end
   end
 
   def run!
     # 1. Put the start node on OPEN
-    @open << start_node
+    @open << @start_node
     debug_stacks
     goal = seek_solution.name
     puts "The GOAL is node: #{goal}."
-    puts "And the solution path is: #{@closed.map {|x| x.name}.join(' - ')} - #{goal}."
+    puts "And the solution path is: #{@closed.map(&:name).join(' - ')} - #{goal}."
   end
 
   def seek_solution
@@ -37,7 +45,7 @@ class DepthFirst
     # 5. Expand n, generating all of its successors.
     # Put there successors (in no particular order) onn top of OPEN and provide
     # for each a pointer back to _n_.
-    @open.unshift(n.children(@nodes)).flatten!
+    @open.unshift(n.children).flatten!
 
     # 6. If any of these successors is a goal node, exit with the solution obtained by
     # tracing back through its pointers; otherwise continue.
@@ -49,7 +57,7 @@ class DepthFirst
     debug_stacks
 
     # 7. If any of these successors is a dead end, remove it from OPEN and clean up CLOSED
-    for child in n.children(@nodes)
+    for child in n.children
        if child.dead_end
          @open.delete(child)
          clean_up_closed(n)
@@ -67,13 +75,13 @@ class DepthFirst
   def clean_up_closed(node)
     while !node.parent.nil?
       node = node.parent
-      @closed.delete(node) if node && (@open & node.children(@nodes) == [])
+      @closed.delete(node) if node && (@open & node.children == [])
     end    
   end
 
   def debug_stacks
-    p "OPEN: #{@open.map { |x| x.name}.join(' - ')}"
-    p "CLOSED: #{@closed.map { |x| x.name}.join(' - ')}"
+    p "OPEN: #{@open.map(&:name).join(' - ')}"
+    p "CLOSED: #{@closed.map(&:name).join(' - ')}"
     p ""
   end
 end
@@ -87,28 +95,32 @@ end
 @j = Node.new(:name => "J", :parent => @a, :dead_end => true)
 @k = Node.new(:name => "K", :parent => @a, :dead_end => true)
 
+@a.children = [@b, @f, @j, @k]
+
 # B children
 @c = Node.new(:name => "C", :parent => @b, :dead_end => true)
 @d = Node.new(:name => "D", :parent => @b)
 
+@b.children = [@c, @d]
+
 # D children
 @e = Node.new(:name => "E", :parent => @d, :dead_end => true)
+@d.children = [@e]
 
 # F child
 @g = Node.new(:name => "G", :parent => @f)
+@f.children = [@g]
 
 # G child
 @h = Node.new(:name => "H", :parent => @g)
+@g.children = [@h]
 
 # H childs
 @i = Node.new(:name => "I", :parent => @h, :dead_end => true, :goal => true)
-
+@h.children = [@i]
 
 # Let's start the search
-@depth_first = DepthFirst.new
-
-# Add nodes to search
-('a'..'k').each { |var| @depth_first.nodes << instance_variable_get("@#{var}") }
+@depth_first = DepthFirst.new(@a)
 
 # Run the search and seek a solution
 @depth_first.run!

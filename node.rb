@@ -1,5 +1,5 @@
 class Node
-  attr_accessor :name, :start_node, :dead_end, :parent, :goal
+  attr_accessor :name, :start_node, :dead_end, :parent, :goal, :children
   
   # Set defaults
   def initialize(args = {})
@@ -8,10 +8,6 @@ class Node
     @start_node   = args[:start_node] || false
     @dead_end     = args[:dead_end]   || false
     @goal         = args[:goal]       || false
-  end
-  
-  def children(nodes)
-    nodes.select { |x| x.parent == self }
   end
   
   def depth
