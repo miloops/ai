@@ -40,7 +40,7 @@ class BasicSearch
   end
 
   # 2. If OPEN is empty, exit with failure; otherwise continue.
-  def exit_if_open_node_empty 
+  def exit_if_open_node_empty
     raise "OPEN is empty, no way out!!!" if @open.empty?
   end
 
@@ -72,7 +72,7 @@ class BasicSearch
     size = @open.size
     for child in @n.children
       if child.dead_end
-        @open.delete(child).name 
+        @open.delete(child).name
       end
     end
     clean_up_closed(@n) if size != @open.size
@@ -91,4 +91,3 @@ class BasicSearch
     p "------------------------------------------"
   end
 end
-
