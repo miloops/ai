@@ -1,3 +1,4 @@
+$:.unshift File.dirname(__FILE__)
 require 'depth_first'
 require 'breadth_first'
 
