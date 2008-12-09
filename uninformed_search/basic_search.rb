@@ -5,15 +5,10 @@ class BasicSearch
   DEPTH_BOUND = 10
 
   def initialize(start_node = nil)
-    if start_node
-      @open   = []
-      @closed = []
-      @full_path  = []
-      @n = nil
-      @start_node = start_node
-    else
-      raise ArgumentError, "A start node is required!"
-    end
+    raise ArgumentError, "A start node is required!" unless start_node
+    @open, @closed, @full_path = [], [], []
+    @n = nil
+    @start_node = start_node
   end
 
   def run!
