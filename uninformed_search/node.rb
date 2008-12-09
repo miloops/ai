@@ -8,7 +8,7 @@ class Node
     @dead_end     = args[:dead_end]   || false
     @goal         = args[:goal]       || false
   end
-  
+
   def depth
     count = 0
     node = self
