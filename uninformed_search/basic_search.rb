@@ -23,10 +23,7 @@ class BasicSearch
       next if clean_up_closed_if_depth_bound_reached
       expand_n_and_generate_successors
       debug_stacks
-      if @goal = return_solution_found
-        debug_stacks
-        break
-      end
+      break if @goal = return_solution_found
       remove_dead_ends
     end
     puts "Goal node: #{@goal.name}."
